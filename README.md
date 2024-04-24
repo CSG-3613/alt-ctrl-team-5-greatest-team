@@ -12,7 +12,11 @@
 
 ***
 ## **Week of April 24, 2024:**
-- (talked to toy design half)
-- (Start on Level Bulding)
-- 
+- Established future meet date
+- Meet with Toy Design half of the group for streamline artstyle for physical props
+- Specified hardware required for the new controls
+- Made mock designs for hardware
+- First threshold theme determined: Cityscape
+- General Props added
+- Cityscape tiles started
 - ~~Removed herobrine~~
