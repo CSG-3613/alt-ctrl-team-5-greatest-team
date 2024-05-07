@@ -1,9 +1,14 @@
 using System.Collections;
+using System.IO.Ports;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class HammaController : MonoBehaviour
 {
+    private SerialPort port = new SerialPort("COM3", 9600);
+    private string ardInput;
+
     public float hammerModifier = 1;
     public Rigidbody rb;
 
@@ -25,14 +30,17 @@ public class HammaController : MonoBehaviour
     void Start()
     {
         playerStartPos = transform.position;
+        port.Open();
+        Debug.Log("Port is Open");
     }
 
     // Update is called once per frame
     void Update()
     {
+        SerialDataReading();
         int dir = (int)Input.GetAxisRaw("Horizontal");
-        if (dir != lastDir)
-            Strafe(dir);
+        
+        Strafe(dir);
 
         float distToTarget = (playerStartPos.x + currentSlot * slotSize) - transform.position.x;
         if (Mathf.Abs(distToTarget) > 0.1)
@@ -48,8 +56,11 @@ public class HammaController : MonoBehaviour
 
     void Strafe(int dir)
     {
+        if (dir == lastDir)
+            return;
+
         //rb.velocity = new Vector3(dir * strafeSpeed, rb.velocity.y, 0);
-        
+
         if (Mathf.Abs(currentSlot + dir) > 1)
             return;
 
@@ -80,5 +91,25 @@ public class HammaController : MonoBehaviour
     {
 
     }
+    public float SerialDataReading()
+    {
+        ardInput = port.ReadLine();
+        //Debug.Log("Input: " + ardInput);
 
+        if (ardInput == "Left")
+        {
+            Strafe(-1);
+        }
+
+        else if (ardInput == "Right")
+        {
+            Strafe(1);
+        }
+
+        if (ardInput == "Big squeeze")
+        {
+            HitHammer(2.0f);
+        }
+        return 1;
+    }
 }
