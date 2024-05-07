@@ -11,7 +11,12 @@ public class TileManager : MonoBehaviour
     private static GameManager gm;
 
     [SerializeField] private float velocity;
-    [SerializeField] private GameObject LastTile;
+    [SerializeField] private GameObject FirstTile;
+    [SerializeField] private float tileSize;
+    public float startTileZ = 100;
+
+    public bool gameMoving = true;
+
 
     [Header(" Tile/Objects")]
     //index of the current , used to swap what set of arrays are being used for obsticle and Tile generation
@@ -62,7 +67,7 @@ public class TileManager : MonoBehaviour
         if (TMinstance != null && TMinstance != this) { Destroy(this); }
         else { TMinstance = this; }
         //Check that Last Tile has been assigned
-        if (LastTile == null) { Debug.LogError("Assign Last Tile in inspector!!!"); }
+        if (FirstTile == null) { Debug.LogError("Assign Last Tile in inspector!!!"); }
 
         //Assigning the values of the 2d Array
         Initialize2DArrays();
@@ -77,27 +82,26 @@ public class TileManager : MonoBehaviour
 
     void FixedUpdate()
     {
-        velocity = gm.getCurrSpeed();
+        if (gameMoving)
+        {
+            velocity = gm.getCurrSpeed();
+            while (FirstTile.transform.position.z < startTileZ)
+            {
+                SpawnTile();
+            }
+        }
     }
 
-    public void SpawnTile(GameObject _TileToDelete)
+    public void SpawnTile()
     {
+        Vector3 spawnPos = FirstTile.transform.position + (tileSize - Time.deltaTime * velocity) * Vector3.forward;
+        Quaternion spawnRot = FirstTile.transform.rotation;
         GameObject nextTile = Instantiate(
             TilePrefabs[_currentIndex][Random.Range(0, TilePrefabs[_currentIndex].Length)], //Gameobject to instantiate
-            LastTile.transform.position + (5 - Time.deltaTime * velocity) * Vector3.forward, //TilePosition
-            LastTile.transform.rotation); //Tile Rotation
+            spawnPos, //TilePosition
+            spawnRot); //Tile Rotation
 
-        ///if (Random.value < chanceObstacle)
-        //{
-         //   Instantiate(
-           //     ObstaclePrefabs[_currentIndex][Random.Range(0, ObstaclePrefabs[_currentIndex].Length)], //Gameobject to instantiate
-             //   LastTile.transform.position //center reference point
-               // + Random.Range(-1,1) * 5 * Vector3.right + Random.Range(-1, 1) * 5 * Vector3.up, //repositioning logic
-               // LastTile.transform.rotation);
-        //}
-        LastTile = nextTile;
-        //Destroy the Tile that called the spawner
-        Destroy(_TileToDelete);
+        FirstTile = nextTile;
     }
 
 }

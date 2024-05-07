@@ -12,6 +12,8 @@ public class TileMovement : MonoBehaviour
 
     public float Zpos;
 
+    public bool gameMoving = true;
+
     private void Start()
     {
         //get reference to GameManager
@@ -23,6 +25,9 @@ public class TileMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!gameMoving)
+            return;
+
         //get current velocity from GM
         velocity = gm.getCurrSpeed();
         //move the object towards the player
@@ -35,7 +40,7 @@ public class TileMovement : MonoBehaviour
             if(gameObject.layer == 3)
             {
                 //Call the Tile manager to SpawnTile() and pass the Tile to destroy
-                tm.SpawnTile(this.gameObject);
+                //tm.SpawnTile(this.gameObject);
             }
             //if its an obsticle, destroy it
             else if(gameObject.layer == 6) { Destroy(gameObject);}
