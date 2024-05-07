@@ -24,27 +24,37 @@ public class HammaController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        playerStartPos = transform.position;
     }
 
     // Update is called once per frame
     void Update()
     {
-        float dir = Input.GetAxisRaw("Horizontal");
+        int dir = (int)Input.GetAxisRaw("Horizontal");
         if (dir != lastDir)
             Strafe(dir);
+
+        float distToTarget = (playerStartPos.x + currentSlot * slotSize) - transform.position.x;
+        if (Mathf.Abs(distToTarget) > 0.1)
+        {
+            rb.velocity = new Vector3(distToTarget * strafeSpeed, rb.velocity.y, 0);
+        }
 
         float jumpStrength = 2.0f;
         if (Input.GetKeyDown(KeyCode.Space))
             HitHammer(jumpStrength);
-
     }
 
 
-    void Strafe(float dir)
+    void Strafe(int dir)
     {
-        rb.velocity = new Vector3(dir * strafeSpeed, rb.velocity.y, 0);
-        //currentSlot += (int)dir;
+        //rb.velocity = new Vector3(dir * strafeSpeed, rb.velocity.y, 0);
+        
+        if (Mathf.Abs(currentSlot + dir) > 1)
+            return;
+
+        currentSlot += dir;
+        lastDir = dir;
     }
 
 
@@ -53,7 +63,7 @@ public class HammaController : MonoBehaviour
         RaycastHit hit;
         if (Physics.Raycast(transform.position + hammerHitOffset, raycastDir, out hit, rayLength))
         {
-            if (Vector3.Dot(hit.normal, new Vector3(0, 1, 0)) > 0.9f)
+            if (Vector3.Dot(hit.normal, new Vector3(0, 1, 0)) > 0.75f)
             {
                 Jump(hitMagnitude);
             }
