@@ -5751,7 +5751,7 @@ GameObject:
   - component: {fileID: 317641940634157048}
   m_Layer: 3
   m_Name: Bridge_Damage_A
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -9252,7 +9252,7 @@ GameObject:
   - component: {fileID: 7176625802817805831}
   m_Layer: 3
   m_Name: Bridge_Damage_B
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
