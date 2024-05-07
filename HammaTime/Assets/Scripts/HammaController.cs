@@ -7,13 +7,13 @@ public class HammaController : MonoBehaviour
     public float hammerModifier = 1;
     public Rigidbody rb;
 
+    [SerializeField] private Vector3 playerStartPos; 
     [SerializeField] private Vector3 hammerHitOffset = new Vector3(0, 2, 2);
     [SerializeField] private Vector3 raycastDir = new Vector3(0, -1, 0.5f).normalized;
     [SerializeField] private float rayLength = 3;
 
     public float strafeSpeed = 1;
-    [SerializeField] private bool rightKeyDown = false;
-    [SerializeField] private bool leftKeyDown = false;
+    [SerializeField] private int lastDir = 0;
 
     public int currentSlot = 0;
 
@@ -31,7 +31,8 @@ public class HammaController : MonoBehaviour
     void Update()
     {
         float dir = Input.GetAxisRaw("Horizontal");
-        Strafe(dir);
+        if (dir != lastDir)
+            Strafe(dir);
 
         float jumpStrength = 2.0f;
         if (Input.GetKeyDown(KeyCode.Space))
@@ -43,7 +44,7 @@ public class HammaController : MonoBehaviour
     void Strafe(float dir)
     {
         rb.velocity = new Vector3(dir * strafeSpeed, rb.velocity.y, 0);
-        
+        //currentSlot += (int)dir;
     }
 
 

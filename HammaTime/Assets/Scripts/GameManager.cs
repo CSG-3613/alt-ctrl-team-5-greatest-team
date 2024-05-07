@@ -40,7 +40,7 @@ public class GameManager : MonoBehaviour
 
     void FixedUpdate()
     {
-        currSpeed += accelSpeed;
+        currSpeed += accelSpeed * Time.fixedDeltaTime;
         //print(currSpeed);
     }
 
