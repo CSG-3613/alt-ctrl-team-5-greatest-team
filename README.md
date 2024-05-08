@@ -23,5 +23,7 @@
 
 ***
 ## **Week of April 29, 2024:**
--
+- Finish Tile 1
+- Playermodel Started
+- Movement Script Started
 - ~~Removed herobrine~~
