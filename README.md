@@ -27,3 +27,8 @@
 - Playermodel Started
 - Movement Script Started
 - ~~Removed herobrine~~
+
+***
+## **Week of May 6th, 2024:**
+- Finished the game
+- ~~Removed herobrine~~
