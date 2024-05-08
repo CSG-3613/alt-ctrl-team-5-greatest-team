@@ -2,6 +2,8 @@ using System.Collections;
 using System.IO.Ports;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEditor.SearchService;
+using UnityEngine.SceneManagement;
 
 
 public class HammaController : MonoBehaviour
@@ -18,7 +20,10 @@ public class HammaController : MonoBehaviour
     [SerializeField] private float rayLength = 3;
 
     public float strafeSpeed = 1;
+    public float gravityFactor = 1;
     [SerializeField] private int lastDir = 0;
+
+    [SerializeField] private bool isGrounded = false;
 
     public int currentSlot = 0;
 
@@ -33,11 +38,24 @@ public class HammaController : MonoBehaviour
         port.Open();
         Debug.Log("Port is Open");
     }
+    private void OnCollisionEnter(Collision other)
+    {
+        //  For debug only, remove from release code
+        if (other.gameObject.tag == "Obstacle")
+        {
+            print("hit");
+            SceneManager.LoadScene(1);
 
+        }
+
+
+
+    }
     // Update is called once per frame
     void Update()
     {
-        SerialDataReading();
+        if (port.IsOpen) 
+            SerialDataReading();
         int dir = (int)Input.GetAxisRaw("Horizontal");
         
         Strafe(dir);
@@ -51,6 +69,11 @@ public class HammaController : MonoBehaviour
         float jumpStrength = 2.0f;
         if (Input.GetKeyDown(KeyCode.Space))
             HitHammer(jumpStrength);
+    }
+
+    private void FixedUpdate()
+    {
+        UpdateGravity();
     }
 
 
@@ -86,11 +109,34 @@ public class HammaController : MonoBehaviour
         rb.velocity = new Vector3(rb.velocity.x, jumpMagnitude * hammerModifier, 0);
     }
 
-
-    void Death()
+    bool IsGrounded()
     {
+        if (rb.velocity.y > 0)
+            return false;
+
+        RaycastHit hit;
+        Physics.Raycast(transform.position, new Vector3(0, -1, 0), out hit, 0.25f);
+        if (hit.collider != null)
+            return true;
+
+        return false;
+    }
+
+    void UpdateGravity()
+    {
+        isGrounded = IsGrounded();
+        if (isGrounded)
+        {
+            rb.velocity = new Vector3(rb.velocity.x, -0.5f, rb.velocity.z);
+        }
+        else
+        {
+            rb.velocity += new Vector3(0, gravityFactor * -9.81f * Time.fixedDeltaTime, 0);
+        }
+
 
     }
+
     public float SerialDataReading()
     {
         ardInput = port.ReadLine();

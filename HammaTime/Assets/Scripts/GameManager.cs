@@ -42,6 +42,8 @@ public class GameManager : MonoBehaviour
     {
         currSpeed += accelSpeed * Time.fixedDeltaTime;
         //print(currSpeed);
+
+        
     }
 
     public float getCurrSpeed()
