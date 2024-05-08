@@ -20,6 +20,8 @@ public class scr : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!port.IsOpen)
+            return;
         ardInput = port.ReadLine();
         if (ardInput == "Big squeeze")
         {

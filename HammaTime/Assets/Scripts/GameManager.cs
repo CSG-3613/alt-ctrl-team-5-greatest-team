@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using TMPro;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -15,6 +16,11 @@ public class GameManager : MonoBehaviour
     [SerializeField] private float currSpeed;
 
     [SerializeField] private TextMeshProUGUI gameoverText;
+
+    [SerializeField] private TextMeshProUGUI scoreUI;
+    [SerializeField] private float score = 0;
+    public float scoreMultiplier = 1;
+    public float multiplierIncreaseFactor = 0.01f;
 
     private void Awake()
     {
@@ -38,12 +44,18 @@ public class GameManager : MonoBehaviour
         currSpeed = startSpeed;
     }
 
+    private void Update()
+    {
+        scoreUI.text= "Score: " + (Mathf.Round(score * 10) / 10.0f);
+    }
+
     void FixedUpdate()
     {
         currSpeed += accelSpeed * Time.fixedDeltaTime;
         //print(currSpeed);
 
-        
+        score += scoreMultiplier * Time.fixedDeltaTime;
+        scoreMultiplier += multiplierIncreaseFactor * Time.fixedDeltaTime;
     }
 
     public float getCurrSpeed()
